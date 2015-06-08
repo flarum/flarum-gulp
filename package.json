@@ -16,7 +16,7 @@
     "url": "https://github.com/flarum/gulp/issues"
   },
   "homepage": "https://github.com/flarum/gulp",
-  "devDependencies": {
+  "dependencies": {
     "gulp": "^3.8.11",
     "gulp-babel": "^5.1.0",
     "gulp-cached": "^1.0.4",
