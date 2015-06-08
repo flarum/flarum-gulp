@@ -25,11 +25,18 @@ module.exports = function(options) {
 
     stream.queue(gulp.src(options.moduleFiles)
       .pipe(cached('scripts'))
-      .pipe(babel({ modules: 'amd', moduleIds: true, moduleRoot: options.modulePrefix }))
+      .pipe(babel({
+        modules: 'amd',
+        moduleIds: true,
+        moduleRoot: options.modulePrefix,
+        externalHelpers: options.externalHelpers
+      }))
       .pipe(remember('scripts')));
 
     stream.queue(gulp.src(options.bootstrapFiles)
-      .pipe(babel()));
+      .pipe(babel({
+        externalHelpers: options.externalHelpers
+      })));
 
     stream.done()
       .pipe(concat(path.basename(options.outputFile)))
