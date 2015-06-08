@@ -13,24 +13,22 @@ var streamqueue = require('streamqueue');
 module.exports = function(options) {
   options = options || {};
 
-  options.initFiles = options.initFiles || [];
+  options.files = options.files || [];
   options.moduleFiles = options.moduleFiles || ['src/**/*.js'];
-  options.files = options.files || ['bootstrap.js'];
+  options.bootstrapFiles = options.bootstrapFiles || ['bootstrap.js'];
   options.outputFile = options.outputFile || 'dist/extension.js';
 
   gulp.task('default', function() {
     var stream = streamqueue({objectMode: true});
 
-    if (options.initFiles) {
-      stream.queue(gulp.src(options.initFiles));
-    }
+    stream.queue(gulp.src(options.files));
 
     stream.queue(gulp.src(options.moduleFiles)
       .pipe(cached('scripts'))
       .pipe(babel({ modules: 'amd', moduleIds: true, moduleRoot: options.modulePrefix }))
       .pipe(remember('scripts')));
 
-    stream.queue(gulp.src(options.files)
+    stream.queue(gulp.src(options.bootstrapFiles)
       .pipe(babel()));
 
     stream.done()
