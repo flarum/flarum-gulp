@@ -13,15 +13,16 @@ var streamqueue = require('streamqueue');
 module.exports = function(options) {
   options = options || {};
 
-  options.files = options.files || ['bootstrap.js'];
+  options.initFiles = options.initFiles || [];
   options.moduleFiles = options.moduleFiles || ['src/**/*.js'];
+  options.files = options.files || ['bootstrap.js'];
   options.outputFile = options.outputFile || 'dist/extension.js';
 
   gulp.task('default', function() {
     var stream = streamqueue({objectMode: true});
 
-    if (options.loader) {
-      stream.queue(gulp.src(options.loader));
+    if (options.initFiles) {
+      stream.queue(gulp.src(options.initFiles));
     }
 
     stream.queue(gulp.src(options.moduleFiles)
