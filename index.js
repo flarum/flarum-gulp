@@ -18,14 +18,21 @@ module.exports = function(options) {
   options.outputFile = options.outputFile || 'dist/extension.js';
 
   gulp.task('default', function() {
-    return streamqueue({objectMode: true},
-      gulp.src(options.moduleFiles)
-        .pipe(cached('scripts'))
-        .pipe(babel({ modules: 'amd', moduleIds: true, moduleRoot: options.modulePrefix }))
-        .pipe(remember('scripts')),
-      gulp.src(options.files)
-        .pipe(babel())
-    )
+    var stream = streamqueue({objectMode: true});
+
+    if (options.loader) {
+      stream.queue(gulp.src(options.loader));
+    }
+
+    stream.queue(gulp.src(options.moduleFiles)
+      .pipe(cached('scripts'))
+      .pipe(babel({ modules: 'amd', moduleIds: true, moduleRoot: options.modulePrefix }))
+      .pipe(remember('scripts')));
+
+    stream.queue(gulp.src(options.files)
+      .pipe(babel()));
+
+    stream.done()
       .pipe(concat(path.basename(options.outputFile)))
       .pipe(gulpif(argv.production, uglify()))
       .pipe(gulp.dest(path.dirname(options.outputFile)))
