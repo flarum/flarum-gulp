@@ -47,7 +47,7 @@ module.exports = function(options) {
 
   gulp.task('watch', ['default'], function () {
     livereload.listen();
-    var watcher = gulp.watch(options.moduleFiles.concat(options.files), ['default']);
+    var watcher = gulp.watch(options.moduleFiles.concat(options.files).concat(options.bootstrapFiles), ['default']);
     watcher.on('change', function (event) {
       if (event.type === 'deleted') {
         delete cached.caches.scripts[event.path];
