@@ -10,6 +10,11 @@ var cached = require('gulp-cached');
 var remember = require('gulp-remember');
 var streamqueue = require('streamqueue');
 
+function handleError(e) {
+  console.log(e.toString());
+  this.emit('end');
+}
+
 module.exports = function(options) {
   options = options || {};
 
@@ -31,12 +36,14 @@ module.exports = function(options) {
         moduleRoot: options.modulePrefix,
         externalHelpers: options.externalHelpers
       }))
+      .on('error', handleError)
       .pipe(remember('scripts')));
 
     stream.queue(gulp.src(options.bootstrapFiles)
       .pipe(babel({
         externalHelpers: options.externalHelpers
-      })));
+      }))
+      .on('error', handleError));
 
     stream.done()
       .pipe(concat(path.basename(options.outputFile)))
