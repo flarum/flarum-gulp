@@ -31,7 +31,7 @@ module.exports = function(options) {
     stream.queue(gulp.src(options.moduleFiles)
       .pipe(cached('scripts'))
       .pipe(babel({
-        modules: 'amd',
+        modules: 'system',
         moduleIds: true,
         moduleRoot: options.modulePrefix,
         externalHelpers: options.externalHelpers,
