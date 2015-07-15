@@ -36,7 +36,7 @@ module.exports = function(options) {
         moduleRoot: options.modulePrefix,
         externalHelpers: options.externalHelpers,
         jsxPragma: 'm',
-        plugins: ['object-assign']
+        plugins: [require('babel-plugin-object-assign')]
       }))
       .on('error', handleError)
       .pipe(remember('scripts')));
@@ -45,7 +45,7 @@ module.exports = function(options) {
       .pipe(babel({
         externalHelpers: options.externalHelpers,
         jsxPragma: 'm',
-        plugins: ['object-assign']
+        plugins: [require('babel-plugin-object-assign')]
       }))
       .on('error', handleError));
 
