@@ -34,14 +34,18 @@ module.exports = function(options) {
         modules: 'amd',
         moduleIds: true,
         moduleRoot: options.modulePrefix,
-        externalHelpers: options.externalHelpers
+        externalHelpers: options.externalHelpers,
+        jsxPragma: 'm',
+        plugins: ['object-assign']
       }))
       .on('error', handleError)
       .pipe(remember('scripts')));
 
     stream.queue(gulp.src(options.bootstrapFiles)
       .pipe(babel({
-        externalHelpers: options.externalHelpers
+        externalHelpers: options.externalHelpers,
+        jsxPragma: 'm',
+        plugins: ['object-assign']
       }))
       .on('error', handleError));
 

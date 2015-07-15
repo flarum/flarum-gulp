@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/flarum/gulp",
   "dependencies": {
+    "babel-plugin-object-assign": "^1.2.0",
     "gulp-babel": "^5.1.0",
     "gulp-cached": "^1.0.4",
     "gulp-concat": "^2.5.2",
