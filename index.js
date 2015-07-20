@@ -20,7 +20,6 @@ module.exports = function(options) {
 
   options.files = options.files || [];
   options.moduleFiles = options.moduleFiles || ['src/**/*.js'];
-  options.bootstrapFiles = options.bootstrapFiles || ['bootstrap.js'];
   options.outputFile = options.outputFile || 'dist/extension.js';
 
   gulp.task('default', function() {
@@ -41,14 +40,6 @@ module.exports = function(options) {
       .on('error', handleError)
       .pipe(remember('scripts')));
 
-    stream.queue(gulp.src(options.bootstrapFiles)
-      .pipe(babel({
-        externalHelpers: options.externalHelpers,
-        jsxPragma: 'm',
-        plugins: [require('babel-plugin-object-assign')]
-      }))
-      .on('error', handleError));
-
     stream.done()
       .pipe(concat(path.basename(options.outputFile)))
       .pipe(gulpif(argv.production, uglify()))
@@ -58,7 +49,7 @@ module.exports = function(options) {
 
   gulp.task('watch', ['default'], function () {
     livereload.listen();
-    var watcher = gulp.watch(options.moduleFiles.concat(options.files).concat(options.bootstrapFiles), ['default']);
+    var watcher = gulp.watch(options.moduleFiles.concat(options.files), ['default']);
     watcher.on('change', function (event) {
       if (event.type === 'deleted') {
         delete cached.caches.scripts[event.path];
