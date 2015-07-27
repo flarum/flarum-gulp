@@ -19,7 +19,7 @@ module.exports = function(options) {
   options = options || {};
 
   options.files = options.files || [];
-  options.moduleFiles = options.moduleFiles || ['src/**/*.js'];
+  options.modules = options.modules || {};
   options.outputFile = options.outputFile || 'dist/extension.js';
 
   gulp.task('default', function() {
@@ -27,18 +27,22 @@ module.exports = function(options) {
 
     stream.queue(gulp.src(options.files));
 
-    stream.queue(gulp.src(options.moduleFiles)
-      .pipe(cached('scripts'))
-      .pipe(babel({
-        modules: 'system',
-        moduleIds: true,
-        moduleRoot: options.modulePrefix,
-        externalHelpers: options.externalHelpers,
-        jsxPragma: 'm',
-        plugins: [require('babel-plugin-object-assign')]
-      }))
-      .on('error', handleError)
-      .pipe(remember('scripts')));
+    for (var prefix in options.modules) {
+      stream.queue(
+        gulp.src(options.modules[prefix])
+          .pipe(cached('modules'))
+          .pipe(babel({
+            modules: 'system',
+            moduleIds: true,
+            moduleRoot: prefix,
+            externalHelpers: options.externalHelpers,
+            jsxPragma: 'm',
+            plugins: [require('babel-plugin-object-assign')]
+          }))
+          .on('error', handleError)
+          .pipe(remember('modules'))
+      );
+    }
 
     stream.done()
       .pipe(concat(path.basename(options.outputFile)))
@@ -49,12 +53,17 @@ module.exports = function(options) {
 
   gulp.task('watch', ['default'], function () {
     livereload.listen();
-    var watcher = gulp.watch(options.moduleFiles.concat(options.files), ['default']);
-    watcher.on('change', function (event) {
-      if (event.type === 'deleted') {
-        delete cached.caches.scripts[event.path];
-        remember.forget('scripts', event.path);
-      }
-    });
+    gulp.watch(options.files, ['default']);
+
+    for (var prefix in options.modules) {
+      var watcher = gulp.watch(options.modules[prefix], ['default']);
+
+      watcher.on('change', function (event) {
+        if (event.type === 'deleted') {
+          delete cached.caches['modules' + prefix][event.path];
+          remember.forget('modules' + prefix, event.path);
+        }
+      });
+    }
   });
 };
