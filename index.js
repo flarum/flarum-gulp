@@ -44,7 +44,7 @@ module.exports = function(options) {
       );
     }
 
-    stream.done()
+    return stream.done()
       .pipe(concat(path.basename(options.outputFile)))
       .pipe(gulpif(argv.production, uglify()))
       .pipe(gulp.dest(path.dirname(options.outputFile)))
