@@ -45,7 +45,7 @@ module.exports = function(options) {
     }
 
     return stream.done()
-      .pipe(concat(path.basename(options.outputFile)))
+      .pipe(concat(path.basename(options.outputFile), {newLine: ';'}))
       .pipe(gulpif(argv.production, uglify()))
       .pipe(gulp.dest(path.dirname(options.outputFile)))
       .pipe(livereload());
