@@ -1,10 +1,6 @@
 var path = require('path');
 var gulp = require('gulp');
-var livereload = require('gulp-livereload');
 var concat = require('gulp-concat');
-var argv = require('yargs').argv;
-var uglify = require('gulp-uglify');
-var gulpif = require('gulp-if');
 var babel = require('gulp-babel');
 var cached = require('gulp-cached');
 var remember = require('gulp-remember');
@@ -46,13 +42,10 @@ module.exports = function(options) {
 
     return stream.done()
       .pipe(concat(path.basename(options.outputFile), {newLine: ';'}))
-      .pipe(gulpif(argv.production, uglify()))
-      .pipe(gulp.dest(path.dirname(options.outputFile)))
-      .pipe(livereload());
+      .pipe(gulp.dest(path.dirname(options.outputFile)));
   });
 
   gulp.task('watch', ['default'], function () {
-    livereload.listen();
     gulp.watch(options.files, ['default']);
 
     for (var prefix in options.modules) {
