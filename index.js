@@ -17,6 +17,7 @@ module.exports = function(options) {
   options.files = options.files || [];
   options.modules = options.modules || {};
   options.outputFile = options.outputFile || 'dist/extension.js';
+  options.externalHelpers = typeof options.externalHelpers === 'undefined' ? true : options.externalHelpers;
 
   gulp.task('default', function() {
     var stream = streamqueue({objectMode: true});
