@@ -42,7 +42,7 @@ module.exports = function(options) {
     }
 
     return stream.done()
-      .pipe(concat(path.basename(options.outputFile), {newLine: ';'}))
+      .pipe(concat(path.basename(options.outputFile), {newLine: ';\n'}))
       .pipe(gulp.dest(path.dirname(options.outputFile)));
   });
 
