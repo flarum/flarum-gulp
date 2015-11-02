@@ -26,9 +26,11 @@ module.exports = function(options) {
     stream.queue(gulp.src(options.files));
 
     for (var prefix in options.modules) {
+      var modules = options.modules[prefix];
+
       stream.queue(
-        gulp.src(options.modules[prefix])
-          .pipe(order(options.modules[prefix]))
+        gulp.src(modules)
+          .pipe(order(Array.isArray(modules) ? modules : [modules]))
           .pipe(cached('modules'))
           .pipe(babel({
             modules: 'system',
