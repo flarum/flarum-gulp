@@ -4,6 +4,7 @@ var concat = require('gulp-concat');
 var babel = require('gulp-babel');
 var cached = require('gulp-cached');
 var remember = require('gulp-remember');
+var order = require('gulp-order');
 var streamqueue = require('streamqueue');
 
 function handleError(e) {
@@ -27,6 +28,7 @@ module.exports = function(options) {
     for (var prefix in options.modules) {
       stream.queue(
         gulp.src(options.modules[prefix])
+          .pipe(order(options.modules[prefix]))
           .pipe(cached('modules'))
           .pipe(babel({
             modules: 'system',
