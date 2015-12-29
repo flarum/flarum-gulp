@@ -1,21 +1,21 @@
 {
   "name": "flarum-gulp",
-  "version": "0.1.6",
-  "description": "Gulp wrapper for Flarum extension JavaScript compilation.",
+  "version": "0.1.7",
+  "description": "Gulp wrapper for Flarum JavaScript compilation.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/flarum/gulp.git"
+    "url": "https://github.com/flarum/flarum-gulp.git"
   },
   "author": "Toby Zerner <toby.zerner@gmail.com> (http://tobyzerner.com)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/flarum/gulp/issues"
+    "url": "https://github.com/flarum/flarum-gulp/issues"
   },
-  "homepage": "https://github.com/flarum/gulp",
+  "homepage": "https://github.com/flarum/flarum-gulp",
   "dependencies": {
     "babel-plugin-object-assign": "^1.2.0",
     "gulp-babel": "^5.1.0",
