@@ -6,6 +6,8 @@ var cached = require('gulp-cached');
 var remember = require('gulp-remember');
 var order = require('gulp-order');
 var streamqueue = require('streamqueue');
+var file = require('gulp-file');
+var babelCore = require('babel-core');
 
 function handleError(e) {
   console.log(e.toString());
@@ -18,10 +20,13 @@ module.exports = function(options) {
   options.files = options.files || [];
   options.modules = options.modules || {};
   options.outputFile = options.outputFile || 'dist/extension.js';
-  options.externalHelpers = typeof options.externalHelpers === 'undefined' ? true : options.externalHelpers;
 
   gulp.task('default', function() {
     var stream = streamqueue({objectMode: true});
+
+    if (options.includeHelpers) {
+      stream.queue(file('helpers.js', babelCore.buildExternalHelpers(null, 'global'), {src: true}));
+    }
 
     stream.queue(gulp.src(options.files));
 
@@ -33,12 +38,15 @@ module.exports = function(options) {
           .pipe(order(Array.isArray(modules) ? modules : [modules]))
           .pipe(cached('modules'))
           .pipe(babel({
-            modules: 'system',
+            presets: [require('babel-preset-es2015'), require('babel-preset-react')],
+            plugins: [
+              [require('babel-plugin-transform-react-jsx'), {'pragma': 'm'}],
+              require('babel-plugin-transform-es2015-modules-systemjs'),
+              require('babel-plugin-transform-object-assign'),
+              require('babel-plugin-external-helpers')
+            ],
             moduleIds: true,
-            moduleRoot: prefix,
-            externalHelpers: options.externalHelpers,
-            jsxPragma: 'm',
-            plugins: [require('babel-plugin-object-assign')]
+            moduleRoot: prefix
           }))
           .on('error', handleError)
           .pipe(remember('modules'))
