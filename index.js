@@ -91,7 +91,7 @@ module.exports = function(options) {
         gulp.src(modules)
           .pipe(eslint(options.eslintConfig))
           .pipe(eslint.format())
-          .pipe(eslint.failAfterError());
+          .pipe(eslint.failAfterError())
        );
     }
     
@@ -117,7 +117,7 @@ module.exports = function(options) {
               }))
               .pipe(gulp.dest(initialPath));
           })))
-          .pipe(gulp.dest(initialPath));
+          .pipe(gulp.dest(initialPath))
       );
     }
     
