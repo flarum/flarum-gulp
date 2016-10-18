@@ -89,7 +89,7 @@ module.exports = function(options) {
       
       stream.queue(
         gulp.src(modules)
-          .pipe(eslint(options.eslintConfig))
+          .pipe(eslint(options.eslintConfig)
           .pipe(eslint.format())
           .pipe(eslint.failAfterError());
        );
@@ -108,7 +108,7 @@ module.exports = function(options) {
       
       stream.queue(
         gulp.src(modules, {base: `${process.cwd()}/${initialPath}`})
-          .pipe(eslint(config))
+          .pipe(eslint(options.eslintConfig)
           .pipe(eslint.format())
           .pipe(gulpIf(isFixed, gulpTap((file) => {
             gulp.src(file.path, { base: `${process.cwd()}/${initialPath}`})
