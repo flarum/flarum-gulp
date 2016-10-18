@@ -75,9 +75,11 @@ module.exports = function(options) {
   });
 
   gulp.task('lint', () => {
-      return gulp.src(['src/**/*.js'])
-          .pipe(eslint())
-          .pipe(eslint.format())
-          .pipe(eslint.failAfterError());
+    options.eslintConfig = options.eslintConfig || require('./package.json').eslintConfig;
+
+    return gulp.src(['src/**/*.js'])
+      .pipe(eslint(options.eslintConfig))
+      .pipe(eslint.format())
+      .pipe(eslint.failAfterError());
   });
 };
