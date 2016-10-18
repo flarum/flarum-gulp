@@ -12,19 +12,27 @@ gulp({
   ],
   modules: {
     'vendor/package': 'src/**/*.js'
+  },
+  eslintConfig: {
+    rules: {
+      'no-console': 'off'
+    }
   }
 });
 ```
 
 ```bash
-$ gulp         # compile
-$ gulp watch   # compile and watch for changes
+$ gulp            # compile
+$ gulp watch      # compile and watch for changes
+$ gulp lint       # lint
+$ gulp lint-fix   # lint and fix
 ```
 
 ## Options
 
 * `files` An array of individual files to concatenate.
 * `modules` A map of module prefixes to their source files.
-    * Modules are transpiled to ES5 using Babel, including `Object.assign`.
+    * Modules are transpiled to ES6 using Babel, including `Object.assign`.
     * JSX is converted into Mithril's `m` syntax.
+* `eslintConfig` Object containting esling config
 * `outputFile` The resulting file to write to. Defaults to `dist/extension.js`.
