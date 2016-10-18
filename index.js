@@ -8,6 +8,9 @@ var remember = require('gulp-remember');
 var order = require('gulp-order');
 var streamqueue = require('streamqueue');
 var file = require('gulp-file');
+var gulpIf = require('gulp-if');
+var gulpTap = require("gulp-tap");
+var rename = require("gulp-rename");
 var babelCore = require('babel-core');
 
 function handleError(e) {
@@ -74,12 +77,4 @@ module.exports = function(options) {
     }
   });
 
-  gulp.task('lint', () => {
-    options.eslintConfig = options.eslintConfig || require('./package.json').eslintConfig;
-
-    return gulp.src(['src/**/*.js'])
-      .pipe(eslint(options.eslintConfig))
-      .pipe(eslint.format())
-      .pipe(eslint.failAfterError());
-  });
-};
+  gulp.task('lint', function () {
