@@ -1,3 +1,4 @@
+var fs = require('fs');
 var path = require('path');
 var gulp = require('gulp');
 var eslint = require('gulp-eslint');
@@ -10,7 +11,6 @@ var streamqueue = require('streamqueue');
 var file = require('gulp-file');
 var gulpIf = require('gulp-if');
 var gulpTap = require("gulp-tap");
-var rename = require("gulp-rename");
 var babelCore = require('babel-core');
 
 function handleError(e) {
@@ -104,18 +104,17 @@ module.exports = function(options) {
     
     for (var prefix in options.modules) {
       var modules = options.modules[prefix];
-      var initialPath = modules.split('/')[0];
+      var initialPath = modules.toString().split('/')[0];
       
       stream.queue(
         gulp.src(modules, {base: `${process.cwd()}/${initialPath}`})
           .pipe(eslint(options.eslintConfig))
           .pipe(eslint.format())
           .pipe(gulpIf(isFixed, gulpTap((file) => {
-            gulp.src(file.path, { base: `${process.cwd()}/${initialPath}`})
-              .pipe(rename({
-                extname: ".js.old"
-              }))
-              .pipe(gulp.dest(initialPath));
+            fs.createReadStream(file.path)
+              .pipe(fs.createWriteStream(file.path.replace('.js', '.js.old'))
+                .on('error', handleError))
+              .on('error', handleError);
           })))
           .pipe(gulp.dest(initialPath))
       );
