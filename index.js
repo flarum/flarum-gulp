@@ -17,12 +17,16 @@ function handleError(e) {
   console.log(e.toString());
   this.emit('end');
 }
+function isFixed (file) {
+  return file.eslint != null && file.eslint.fixed;
+}
 
 module.exports = function(options) {
   options = options || {};
 
   options.files = options.files || [];
   options.modules = options.modules || {};
+  options.eslintConfig = options.eslintConfig || require('./package.json').eslintConfig;
   options.outputFile = options.outputFile || 'dist/extension.js';
 
   gulp.task('default', function() {
@@ -78,3 +82,45 @@ module.exports = function(options) {
   });
 
   gulp.task('lint', function () {
+    var stream = streamqueue({objectMode: true});
+    
+    for (var prefix in options.modules) {
+      var modules = options.modules[prefix];
+      
+      stream.queue(
+        gulp.src(modules)
+          .pipe(eslint(options.eslintConfig))
+          .pipe(eslint.format())
+          .pipe(eslint.failAfterError());
+       );
+    }
+    
+    return stream.done();
+  });
+  
+  gulp.task('lint-fix', function () {
+    options.eslintConfig.fix = true;
+    var stream = streamqueue({objectMode: true});
+    
+    for (var prefix in options.modules) {
+      var modules = options.modules[prefix];
+      var initialPath = modules.split('/')[0];
+      
+      stream.queue(
+        gulp.src(modules, {base: `${process.cwd()}/${initialPath}`})
+          .pipe(eslint(config))
+          .pipe(eslint.format())
+          .pipe(gulpIf(isFixed, gulpTap((file) => {
+            gulp.src(file.path, { base: `${process.cwd()}/${initialPath}`})
+              .pipe(rename({
+                extname: ".js.old"
+              }))
+              .pipe(gulp.dest(initialPath));
+          })))
+          .pipe(gulp.dest(initialPath));
+      );
+    }
+    
+    return stream.done();
+  });
+};
