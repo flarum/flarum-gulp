@@ -44,6 +44,8 @@
   "eslintConfig": {
     "extends": "eslint-config-airbnb",
     "rules": {
+      "class-methods-use-this": "off",
+      "func-names": "off",
       "import/no-unresolved": "off",
       "import/no-extraneous-dependencies": "off",
       "import/extensions": ["error", "never"],
