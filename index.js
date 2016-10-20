@@ -10,14 +10,14 @@ var order = require('gulp-order');
 var streamqueue = require('streamqueue');
 var file = require('gulp-file');
 var gulpIf = require('gulp-if');
-var gulpTap = require("gulp-tap");
+var gulpTap = require('gulp-tap');
 var babelCore = require('babel-core');
 
 function handleError(e) {
   console.log(e.toString());
   this.emit('end');
 }
-function isFixed (file) {
+function isFixed(file) {
   return file.eslint != null && file.eslint.fixed;
 }
 
