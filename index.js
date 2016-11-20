@@ -66,8 +66,8 @@ module.exports = function(options) {
 
       watcher.on('change', function (event) {
         if (event.type === 'deleted') {
-          delete cached.caches['modules' + prefix][event.path];
-          remember.forget('modules' + prefix, event.path);
+          delete cached.caches.modules[event.path];
+          remember.forget('modules', event.path);
         }
       });
     }
